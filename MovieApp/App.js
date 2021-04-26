@@ -14,6 +14,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import Home from './src/pages/Home';
+import Search from './src/pages/Search';
+import Favorites from './src/pages/Favorites';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -53,7 +55,7 @@ export default function App() {
         />
         <Tab.Screen 
           name="Search" 
-          component={Home}
+          component={Search}
           options={{
             tabBarIcon: ({ color }) => (
               <Feather name="search" size={24} color={color}/>
@@ -63,7 +65,7 @@ export default function App() {
         />
         <Tab.Screen 
           name="Favorites" 
-          component={Home}
+          component={Favorites}
           options={{
             tabBarIcon: ({ color }) => (
               <Feather name="bookmark" size={24} color={color}/>

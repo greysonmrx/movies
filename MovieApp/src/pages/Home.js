@@ -9,7 +9,6 @@ import {
     StyleSheet,
     Dimensions
 } from 'react-native';
-import Constants from 'expo-constants';
 
 import MovieItem from '../components/MovieItem';
 
@@ -74,9 +73,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 20,
+        paddingHorizontal: 20,
         paddingBottom: 35,
-        paddingTop: Constants.statusBarHeight
     },
     message: {
         color: '#64696E',
