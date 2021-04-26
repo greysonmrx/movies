@@ -11,33 +11,22 @@ import {
   Poppins_800ExtraBold
 } from '@expo-google-fonts/poppins';
 import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { 
+  createMaterialBottomTabNavigator 
+} from '@react-navigation/material-bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from './src/pages/Home';
 import Search from './src/pages/Search';
 import Favorites from './src/pages/Favorites';
+import MovieDetails from './src/pages/MovieDetails';
 
 const Tab = createMaterialBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default function App() {
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_600SemiBold,
-    Poppins_800ExtraBold
-  });
-
-  if (!fontsLoaded) {
-    return (
-      <View>
-        <Text>Carregando...</Text>
-      </View>
-    );
-  }
-
+function BottomTabs() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
+    <Tab.Navigator
         barStyle={{ backgroundColor: '#121A23' }}
         activeColor="#4B97C5"
         inactiveColor="#3C434A"
@@ -74,6 +63,35 @@ export default function App() {
           }}
         />
       </Tab.Navigator>
+  );
+}
+
+export default function App() {
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_800ExtraBold
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View>
+        <Text>Carregando...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Stack.Screen name="BottomTab" component={BottomTabs}/>
+        <Stack.Screen name="MovieDetails" component={MovieDetails}/>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

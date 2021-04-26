@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
 
-export default function MovieItem({ cover, title, synopsis, rating }) {
+import Rating from './Rating';
+
+export default function MovieItem({ 
+    cover, title, synopsis, rating, onPress
+}) {
     return (
-        <TouchableOpacity style={styles.movieItem}>
+        <TouchableOpacity style={styles.movieItem} onPress={onPress}>
             <Image 
                 source={{ uri: cover }} 
                 style={styles.movieItemImage}
@@ -21,38 +24,7 @@ export default function MovieItem({ cover, title, synopsis, rating }) {
                 >
                     {synopsis}
                 </Text>
-                <View style={styles.ratingContainer}>
-                    <FontAwesome
-                        style={{ marginRight: 6 }} 
-                        name="star" 
-                        size={16} 
-                        color={rating >= 1 ? '#FF9F00' : '#57575B'} 
-                    />
-                    <FontAwesome
-                        style={{ marginRight: 6 }} 
-                        name="star" 
-                        size={16} 
-                        color={rating >= 2 ? '#FF9F00' : '#57575B'} 
-                    />
-                    <FontAwesome
-                        style={{ marginRight: 6 }} 
-                        name="star" 
-                        size={16} 
-                        color={rating >= 3 ? '#FF9F00' : '#57575B'} 
-                    />
-                    <FontAwesome
-                        style={{ marginRight: 6 }} 
-                        name="star" 
-                        size={16} 
-                        color={rating >= 4 ? '#FF9F00' : '#57575B'} 
-                    />
-                    <FontAwesome
-                        style={{ marginRight: 6 }} 
-                        name="star" 
-                        size={16} 
-                        color={rating >= 5 ? '#FF9F00' : '#57575B'} 
-                    />
-                </View>
+                <Rating value={rating} />
             </View>
         </TouchableOpacity>
     );
@@ -85,7 +57,4 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins_500Medium',
         marginVertical: 6,
     },
-        ratingContainer: {
-        flexDirection: 'row'
-    }
 });

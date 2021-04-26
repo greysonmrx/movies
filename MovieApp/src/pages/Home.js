@@ -19,7 +19,11 @@ import movies from '../assets/movies';
 
 const WIDTH = Dimensions.get('window').width;
 
-export default function Home() {
+export default function Home({ navigation }) {
+    function goToMovieDetailsPage(movie) {
+        navigation.navigate('MovieDetails', { movie });
+    }
+
     return (
         <ScrollView 
             style={styles.container} 
@@ -37,11 +41,15 @@ export default function Home() {
                 contentContainerStyle={{ paddingHorizontal: 20 }}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal={true}
+                showsHorizontalScrollIndicator={false} 
                 pagingEnabled={true}
                 snapToInterval={WIDTH - 20}
                 ItemSeparatorComponent={() => <View style={{ width: 20 }}/>}
                 renderItem={({ item }) => (
-                <TouchableOpacity style={styles.bannerButton}>
+                <TouchableOpacity 
+                    style={styles.bannerButton}
+                    onPress={() => goToMovieDetailsPage(item)}
+                >
                     <Image source={{ uri: item.banner }} style={styles.bannerImage}/>
                 </TouchableOpacity>
                 )}
@@ -50,13 +58,14 @@ export default function Home() {
                 <Text style={styles.moviesListTitle}>Lançamentos</Text>
                 {
                     movies.map((item) => (
-                    <MovieItem 
-                        key={item.id.toString()}
-                        cover={item.cover}
-                        title={item.title}
-                        synopsis={item.synopsis}
-                        rating={item.rating}
-                    />
+                        <MovieItem 
+                            key={item.id.toString()}
+                            cover={item.cover}
+                            title={item.title}
+                            synopsis={item.synopsis}
+                            rating={item.rating}
+                            onPress={() => goToMovieDetailsPage(item)}
+                        />
                     ))
                 }
             </View>

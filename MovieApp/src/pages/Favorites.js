@@ -5,7 +5,11 @@ import MovieItem from '../components/MovieItem';
 
 import movies from '../assets/movies';
 
-export default function Favorites() {
+export default function Favorites({ navigation }) {
+    function goToMovieDetailsPage(movie) {
+        navigation.navigate('MovieDetails', { movie });
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -26,6 +30,7 @@ export default function Favorites() {
                                 rating={item.rating}
                                 synopsis={item.synopsis}
                                 title={item.title}
+                                onPress={() => goToMovieDetailsPage(item)}
                             />
                         )}
                     />

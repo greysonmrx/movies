@@ -15,7 +15,11 @@ import movies from '../assets/movies';
 
 const WIDTH = Dimensions.get('window').width;
 
-export default function Search() {
+export default function Search({ navigation }) {
+    function goToMovieDetailsPage(movie) {
+        navigation.navigate('MovieDetails', { movie });
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -48,6 +52,7 @@ export default function Search() {
                                 rating={item.rating}
                                 synopsis={item.synopsis}
                                 title={item.title}
+                                onPress={() => goToMovieDetailsPage(item)}
                             />
                         )}
                     />
