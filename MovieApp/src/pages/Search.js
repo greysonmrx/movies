@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -17,6 +17,12 @@ import movies from "../assets/movies";
 const WIDTH = Dimensions.get("window").width;
 
 export default function Search({ navigation }) {
+  const [searchText, setSearchText] = useState("");
+
+  const filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   function goToMovieDetailsPage(movie) {
     navigation.navigate("MovieDetails", { movie });
   }
@@ -25,7 +31,7 @@ export default function Search({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Buscar</Text>
-        <Text style={styles.results}>{movies.length} Resultados</Text>
+        <Text style={styles.results}>{filteredMovies.length} Resultados</Text>
       </View>
       <View style={styles.inputContainer}>
         <Feather name="search" size={24} color="#989CA1" />
@@ -33,11 +39,12 @@ export default function Search({ navigation }) {
           placeholder="Buscar filmes"
           style={styles.input}
           placeholderTextColor="#4A5055"
+          onChangeText={setSearchText}
         />
       </View>
-      {movies.length > 0 ? (
+      {filteredMovies.length > 0 ? (
         <FlatList
-          data={movies}
+          data={filteredMovies}
           contentContainerStyle={styles.moviesList}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
@@ -53,7 +60,7 @@ export default function Search({ navigation }) {
       ) : (
         <View style={styles.noResultsContainer}>
           <Text style={styles.noResultsText}>
-            Nenhum resultado encontrado para “Superman” :(
+            Nenhum resultado encontrado para "{searchText}" :(
           </Text>
         </View>
       )}
