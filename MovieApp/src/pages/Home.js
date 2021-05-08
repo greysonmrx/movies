@@ -1,122 +1,122 @@
-import React from 'react';
-import { 
-    ScrollView,
-    View, 
-    Text, 
-    Image, 
-    FlatList,
-    TouchableOpacity,
-    StyleSheet,
-    Dimensions
-} from 'react-native';
+import React from "react";
+import {
+  ScrollView,
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  StatusBar,
+  SafeAreaView,
+} from "react-native";
 
-import MovieItem from '../components/MovieItem';
+import MovieItem from "../components/MovieItem";
 
-import profileImg from '../assets/profile.jpg';
+import profileImg from "../assets/profile.jpg";
 
-import featuredMovies from '../assets/featuredMovies';
-import movies from '../assets/movies';
+import featuredMovies from "../assets/featuredMovies";
+import movies from "../assets/movies";
 
-const WIDTH = Dimensions.get('window').width;
+const WIDTH = Dimensions.get("window").width;
 
 export default function Home({ navigation }) {
-    function goToMovieDetailsPage(movie) {
-        navigation.navigate('MovieDetails', { movie });
-    }
+  function goToMovieDetailsPage(movie) {
+    navigation.navigate("MovieDetails", { movie });
+  }
 
-    return (
-        <ScrollView 
-            style={styles.container} 
-            contentContainerStyle={{ paddingTop: 20 }}
-        >
-            <View style={styles.header}>
-                <View>
-                <Text style={styles.message}>Olá,</Text>
-                <Text style={styles.name}>Greyson Santos</Text>
-                </View>
-                <Image source={profileImg} style={styles.image}/>
-            </View>
-            <FlatList
-                data={featuredMovies}
-                contentContainerStyle={{ paddingHorizontal: 20 }}
-                keyExtractor={(item) => item.id.toString()}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false} 
-                pagingEnabled={true}
-                snapToInterval={WIDTH - 20}
-                ItemSeparatorComponent={() => <View style={{ width: 20 }}/>}
-                renderItem={({ item }) => (
-                <TouchableOpacity 
-                    style={styles.bannerButton}
-                    onPress={() => goToMovieDetailsPage(item)}
-                >
-                    <Image source={{ uri: item.banner }} style={styles.bannerImage}/>
-                </TouchableOpacity>
-                )}
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <StatusBar barStyle="light-content" />
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.message}>Olá,</Text>
+            <Text style={styles.name}>Greyson Santos</Text>
+          </View>
+          <Image source={profileImg} style={styles.image} />
+        </View>
+        <FlatList
+          data={featuredMovies}
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled={true}
+          snapToInterval={WIDTH - 20}
+          ItemSeparatorComponent={() => <View style={{ width: 20 }} />}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.bannerButton}
+              onPress={() => goToMovieDetailsPage(item)}
+            >
+              <Image source={{ uri: item.banner }} style={styles.bannerImage} />
+            </TouchableOpacity>
+          )}
+        />
+        <View style={styles.moviesList}>
+          <Text style={styles.moviesListTitle}>Lançamentos</Text>
+          {movies.map((item) => (
+            <MovieItem
+              key={item.id.toString()}
+              cover={item.cover}
+              title={item.title}
+              synopsis={item.synopsis}
+              rating={item.rating}
+              onPress={() => goToMovieDetailsPage(item)}
             />
-            <View style={styles.moviesList}>
-                <Text style={styles.moviesListTitle}>Lançamentos</Text>
-                {
-                    movies.map((item) => (
-                        <MovieItem 
-                            key={item.id.toString()}
-                            cover={item.cover}
-                            title={item.title}
-                            synopsis={item.synopsis}
-                            rating={item.rating}
-                            onPress={() => goToMovieDetailsPage(item)}
-                        />
-                    ))
-                }
-            </View>
-        </ScrollView>
-    );
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#111820'
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingBottom: 35,
-    },
-    message: {
-        color: '#64696E',
-        fontSize: 18,
-        fontFamily: 'Poppins_400Regular'
-    },
-    name: {
-        color: '#FFFFFF',
-        fontSize: 20,
-        lineHeight: 24,
-        fontFamily: 'Poppins_600SemiBold'
-    },
-    image: {
-        width: 40,
-        height: 40,
-        borderRadius: 20
-    },
-    bannerButton:{
-        width: WIDTH - 40,
-        aspectRatio: 1.78
-    },
-    bannerImage: {
-        height: '100%',
-        width: '100%',
-        borderRadius: 5
-    },
-    moviesList: {
-        padding: 20
-      },
-    moviesListTitle: {
-        color: '#FFFFFF',
-        fontFamily: 'Poppins_600SemiBold',
-        fontSize: 18,
-        marginBottom: 15
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#111820",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingBottom: 35,
+  },
+  message: {
+    color: "#64696E",
+    fontSize: 18,
+    fontFamily: "Poppins_400Regular",
+  },
+  name: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    lineHeight: 24,
+    fontFamily: "Poppins_600SemiBold",
+  },
+  image: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  bannerButton: {
+    width: WIDTH - 40,
+    aspectRatio: 1.78,
+  },
+  bannerImage: {
+    height: "100%",
+    width: "100%",
+    borderRadius: 5,
+  },
+  moviesList: {
+    padding: 20,
+  },
+  moviesListTitle: {
+    color: "#FFFFFF",
+    fontFamily: "Poppins_600SemiBold",
+    fontSize: 18,
+    marginBottom: 15,
+  },
 });
