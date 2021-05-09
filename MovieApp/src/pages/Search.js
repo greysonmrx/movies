@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -11,13 +11,16 @@ import {
 } from "react-native";
 
 import MovieItem from "../components/MovieItem";
-
-import movies from "../assets/movies";
+import { useSearchMovies } from "../hooks/useSearchMovies";
 
 const WIDTH = Dimensions.get("window").width;
 
 export default function Search({ navigation }) {
+  const { movies, fetchMovies, isLoading } = useSearchMovies();
+
   const [searchText, setSearchText] = useState("");
+
+  useEffect(fetchMovies, []);
 
   const filteredMovies = movies.filter((movie) =>
     movie.title.toLowerCase().includes(searchText.toLowerCase())
@@ -42,28 +45,31 @@ export default function Search({ navigation }) {
           onChangeText={setSearchText}
         />
       </View>
-      {filteredMovies.length > 0 ? (
-        <FlatList
-          data={filteredMovies}
-          contentContainerStyle={styles.moviesList}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <MovieItem
-              cover={item.cover}
-              rating={item.rating}
-              synopsis={item.synopsis}
-              title={item.title}
-              onPress={() => goToMovieDetailsPage(item)}
-            />
-          )}
-        />
-      ) : (
-        <View style={styles.noResultsContainer}>
-          <Text style={styles.noResultsText}>
-            Nenhum resultado encontrado para "{searchText}" :(
-          </Text>
-        </View>
-      )}
+      <FlatList
+        refreshing={isLoading}
+        onRefresh={fetchMovies}
+        data={filteredMovies}
+        contentContainerStyle={styles.moviesList}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={
+          !isLoading && (
+            <View style={styles.noResultsContainer}>
+              <Text style={styles.noResultsText}>
+                Nenhum resultado encontrado para "{searchText}" :(
+              </Text>
+            </View>
+          )
+        }
+        renderItem={({ item }) => (
+          <MovieItem
+            cover={item.cover}
+            rating={item.rating}
+            synopsis={item.synopsis}
+            title={item.title}
+            onPress={() => goToMovieDetailsPage(item)}
+          />
+        )}
+      />
     </SafeAreaView>
   );
 }
