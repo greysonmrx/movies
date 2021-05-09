@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -22,8 +22,12 @@ export default function Search({ navigation }) {
 
   useEffect(fetchMovies, []);
 
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchText.toLowerCase())
+  const filteredMovies = useMemo(
+    () =>
+      movies.filter((movie) =>
+        movie.title.toLowerCase().includes(searchText.toLowerCase())
+      ),
+    [movies, searchText]
   );
 
   function goToMovieDetailsPage(movie) {
