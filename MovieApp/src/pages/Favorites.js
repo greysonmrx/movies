@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, SafeAreaView } from "react-native";
 
 import MovieItem from "../components/MovieItem";
 
-import movies from "../assets/movies";
+import { useFavorites } from "../hooks/useFavorites";
 
 export default function Favorites({ navigation }) {
+  const { favorites, isLoading, fetchFavorites } = useFavorites();
+
+  useEffect(fetchFavorites, []);
+
+  useEffect(() => {
+    console.log("fetchFavorites:changed");
+  }, [fetchFavorites]);
+
   function goToMovieDetailsPage(movie) {
     navigation.navigate("MovieDetails", { movie });
   }
@@ -14,30 +22,33 @@ export default function Favorites({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Favoritos</Text>
-        <Text style={styles.results}>{movies.length} Resultados</Text>
+        <Text style={styles.results}>{favorites.length} Resultados</Text>
       </View>
-      {movies.length > 0 ? (
-        <FlatList
-          data={movies}
-          contentContainerStyle={styles.moviesList}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <MovieItem
-              cover={item.cover}
-              rating={item.rating}
-              synopsis={item.synopsis}
-              title={item.title}
-              onPress={() => goToMovieDetailsPage(item)}
-            />
-          )}
-        />
-      ) : (
-        <View style={styles.noResultsContainer}>
-          <Text style={styles.noResultsText}>
-            Você ainda não tem nenhum filme favorito :(
-          </Text>
-        </View>
-      )}
+      <FlatList
+        refreshing={isLoading}
+        onRefresh={fetchFavorites}
+        data={favorites}
+        contentContainerStyle={styles.moviesList}
+        ListEmptyComponent={
+          !isLoading && (
+            <View style={styles.noResultsContainer}>
+              <Text style={styles.noResultsText}>
+                Você ainda não tem nenhum filme favorito :(
+              </Text>
+            </View>
+          )
+        }
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <MovieItem
+            cover={item.cover}
+            rating={item.rating}
+            synopsis={item.synopsis}
+            title={item.title}
+            onPress={() => goToMovieDetailsPage(item)}
+          />
+        )}
+      />
     </SafeAreaView>
   );
 }
